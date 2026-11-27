@@ -1,0 +1,42 @@
+---
+import Header from '../components/Header.astro';
+import Presentation from './Presentation.astro';
+import Projets from './Projects.astro';
+import Loisirs from './Loisirs.astro';
+import Contacts from './Contacts.astro';
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Charles's Portfolio</title>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <Header />
+        <Presentation />
+        <Projets />
+        <Loisirs />
+        <Contacts />
+    </body>
+</html>
+
+<style>
+    body {
+        background-color : rgba(40,40,40);
+        font-family: Nunito, sans-serif;
+        height: 3000px;
+        margin: 0;
+        overflow-x: clip;
+
+        --list-len-opened: 0px;
+    }
+    body:has(#idproj details[open]) {
+        --list-len-opened: 326px;
+    }
+    body:has(#idproj details:not([open])) {
+        --list-len-opened: 0px;
+    }
+</style>

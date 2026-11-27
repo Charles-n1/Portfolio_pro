@@ -1,0 +1,47 @@
+---
+import Lettre from "../components/Lettre.astro"
+import Deco from "../components/Deco.astro"
+---
+
+<presentation id="idpres">
+    <Deco src="/decorations/rect_1.svg" top="60px" left="-100px" width="450px" height="135px" rotate="-35deg" />
+    <Deco src="/decorations/rect_3.svg" bottom="180px" right="-100px" width="450px" height="135px" rotate="-35deg" />
+    <Deco src="/decorations/rect_8.svg" bottom="-40px" left="-130px" width="375px" height="112px" rotate="-35deg" />
+    <Deco src="/decorations/eclair_3.svg" top="calc(400px + 50vh - 28.2vw - 110px)" left="-15%" width="130%" rotate="-4deg"/>
+    <content>
+        <img class="pp" src="../../public/profile_picture.avif"/>
+        <span class="pdescription">
+            <Lettre input="Hello friends ! Alors C'est Charles NGUYEN"/>
+            <p><Lettre input="Et je suis étudiant à Epitech en 3e année !"/></p>
+            <p><Lettre input="Je suis spécialisé en site Web et en IA."/></p>
+            <p><Lettre input="N'hésitez pas à me contacter ^O^ hihihihi"/></p>
+        </span>
+    </content>
+</presentation>
+
+<style>
+    presentation {
+        ;
+    }
+    content {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        min-height: 50vh;
+        min-width: 100vw;
+
+        margin-top: 200px; /*espace min*/
+        margin-bottom: 200px;
+    }
+    .pdescription {
+        color: rgba(255,255,255);
+        font-size: 25px;
+        justify-self: center;
+        translate: -170px 0px;
+    }
+    .pp {
+        width: 300px;
+        height: 400px;
+        justify-self: center;
+        translate: 170px -40px;
+    }
+</style>

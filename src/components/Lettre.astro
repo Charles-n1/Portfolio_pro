@@ -1,0 +1,15 @@
+---
+const phrase = Astro.props.input;
+---
+
+<lettre>
+    {phrase.split("").map((lettre) =>
+        <span class="lettre">{lettre}</span>)
+    }
+</lettre>
+
+<style>
+    .lettre:hover {
+        color: rgba(0, 127, 255);
+    }
+</style>

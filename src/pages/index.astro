@@ -1,42 +1,682 @@
 ---
+import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import Presentation from './Presentation.astro';
-import Projets from './Projects.astro';
-import Loisirs from './Loisirs.astro';
-import Contacts from './Contacts.astro';
+import { profile, projects, hobbies, contacts } from '../data/portfolio';
 ---
 
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width" />
-        <title>Charles's Portfolio</title>
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <Header />
-        <Presentation />
-        <Projets />
-        <Loisirs />
-        <Contacts />
-    </body>
-</html>
+<Layout title={profile.shortTitle}>
+    <Header />
+
+    <main>
+        <!-- HERO (Brutaliste noir & blanc avec accent bleu) -->
+        <section id="home" class="hero">
+            <div class="container hero-inner">
+                <h1 class="hero-title">
+                    <span class="hero-line-primary">{profile.heroLine1}</span>
+                    <span class="hero-line-secondary">{profile.heroLine2}</span>
+                </h1>
+
+                <p class="hero-bio">{profile.heroBio}</p>
+
+                <a href="#work" class="hero-cta">
+                    <span>{profile.ctaLabel}</span>
+                    <span class="arrow" aria-hidden="true">→</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 01 — PROJETS -->
+        <section id="work" class="section">
+            <div class="container">
+                <div class="section-head">
+                    <span class="section-index">01 / PROJETS</span>
+                    <h2 class="section-title">Travaux sélectionnés.</h2>
+                </div>
+
+                <div class="projects-grid">
+                    {projects.map((project) => (
+                        <article class:list={['project-card', { 'is-extra': project.extra }]}>
+                            <div class="project-top">
+                                <span class="project-num">{project.index}</span>
+                                <span class="project-meta">{project.category} — {project.year}</span>
+                            </div>
+
+                            <h3 class="project-title">{project.title}</h3>
+                            <p class="project-desc">{project.description}</p>
+
+                            <div class="project-footer">
+                                <ul class="stack-list">
+                                    {project.stack.map((tech) => (
+                                        <li>{tech}</li>
+                                    ))}
+                                </ul>
+
+                                <a
+                                    href={project.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="project-link"
+                                >
+                                    VOIR ↗
+                                </a>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+
+                <div class="projects-toggle-wrap">
+                    <button type="button" id="toggle-projects" class="brutal-btn" aria-expanded="false">
+                        VOIR PLUS DE PROJETS +
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 02 — À PROPOS -->
+        <section id="about" class="section">
+            <div class="container">
+                <div class="section-head">
+                    <span class="section-index">02 / À PROPOS</span>
+                    <h2 class="section-title">Profil & Spécialités.</h2>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-text">
+                        <p class="about-lead">{profile.aboutLead}</p>
+                        <p class="about-body">{profile.aboutBody}</p>
+
+                        <div class="focus-list">
+                            {profile.focusAreas.map((area) => (
+                                <div class="focus-row">
+                                    <span class="focus-num">{area.index}</span>
+                                    <div>
+                                        <h3 class="focus-title">{area.title}</h3>
+                                        <p class="focus-desc">{area.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <figure class="portrait-frame">
+                        <img src={profile.avatar} alt="Portrait de Charles Nguyen" class="portrait-img" />
+                        <figcaption class="portrait-caption">
+                            <span>CHARLES NGUYEN</span>
+                            <span>EPITECH — 3E ANNÉE</span>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- 03 — LOISIRS -->
+        <section id="hobbies" class="section">
+            <div class="container">
+                <div class="section-head">
+                    <span class="section-index">03 / LOISIRS</span>
+                    <h2 class="section-title">En dehors du code.</h2>
+                </div>
+
+                <div class="hobbies-list">
+                    {hobbies.map((hobby) => (
+                        <div class="hobby-row">
+                            <span class="hobby-num">{hobby.index}</span>
+                            <h3 class="hobby-title">{hobby.title}</h3>
+                            <p class="hobby-detail">{hobby.detail}</p>
+                            <div class="hobby-icon-wrap">
+                                <img src={hobby.icon} alt={hobby.title} class="hobby-icon" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        <!-- 04 — CONTACT -->
+        <section id="contact" class="section section-contact">
+            <div class="container">
+                <div class="section-head">
+                    <span class="section-index">04 / CONTACT</span>
+                    <h2 class="section-title">Travaillons ensemble.</h2>
+                </div>
+
+                <p class="contact-intro">
+                    Disponible pour des échanges, stages, projets Web ou Intelligence Artificielle.
+                </p>
+
+                <div class="contact-grid">
+                    {contacts.map((item) => (
+                        <a
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="contact-card"
+                        >
+                            <span class="contact-label">{item.label}</span>
+                            <span class="contact-value">{item.value}</span>
+                            <span class="contact-arrow" aria-hidden="true">↗</span>
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span>© {new Date().getFullYear()} {profile.name}</span>
+            <span>EPITECH — WEB & IA</span>
+        </div>
+    </footer>
+
+    <script>
+        const toggleBtn = document.getElementById('toggle-projects');
+        const extraCards = document.querySelectorAll<HTMLElement>('.project-card.is-extra');
+
+        if (toggleBtn && extraCards.length > 0) {
+            let expanded = false;
+            toggleBtn.addEventListener('click', () => {
+                expanded = !expanded;
+                extraCards.forEach((card) => card.classList.toggle('is-visible', expanded));
+                toggleBtn.setAttribute('aria-expanded', String(expanded));
+                toggleBtn.textContent = expanded ? 'VOIR MOINS DE PROJETS −' : 'VOIR PLUS DE PROJETS +';
+            });
+        }
+    </script>
+</Layout>
 
 <style>
-    body {
-        background-color : rgba(40,40,40);
-        font-family: Nunito, sans-serif;
-        height: 3000px;
-        margin: 0;
-        overflow-x: clip;
+    .container {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 0 32px;
+    }
 
-        --list-len-opened: 0px;
+    /* HERO */
+    .hero {
+        min-height: calc(100vh - 68px);
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        padding: 80px 0 100px;
     }
-    body:has(#idproj details[open]) {
-        --list-len-opened: 326px;
+
+    .hero-inner {
+        width: 100%;
     }
-    body:has(#idproj details:not([open])) {
-        --list-len-opened: 0px;
+
+    .hero-title {
+        margin: 0 0 32px;
+        font-family: var(--font-display);
+        font-size: clamp(3rem, 8.2vw, 6.4rem);
+        line-height: 0.98;
+        letter-spacing: -0.03em;
+    }
+
+    .hero-line-primary {
+        display: block;
+        color: var(--fg);
+    }
+
+    .hero-line-secondary {
+        display: block;
+        color: var(--accent);
+    }
+
+    .hero-bio {
+        margin: 0 0 44px;
+        max-width: 560px;
+        font-size: clamp(1rem, 1.5vw, 1.2rem);
+        line-height: 1.65;
+        color: var(--fg-muted);
+    }
+
+    .hero-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: var(--fg);
+        padding-bottom: 6px;
+        border-bottom: 2px solid var(--fg);
+        transition: opacity 0.15s ease;
+    }
+
+    .hero-cta .arrow {
+        display: inline-block;
+        transition: transform 0.2s ease;
+    }
+
+    .hero-cta:hover .arrow {
+        transform: translateX(6px);
+    }
+
+    /* SECTIONS */
+    .section {
+        padding: 110px 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .section-head {
+        margin-bottom: 56px;
+    }
+
+    .section-index {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        color: var(--fg-muted);
+        margin-bottom: 14px;
+    }
+
+    .section-title {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 4.5vw, 3.4rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+    }
+
+    /* PROJETS */
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-top: 1px solid var(--border);
+        border-left: 1px solid var(--border);
+    }
+
+    .project-card {
+        display: flex;
+        flex-direction: column;
+        padding: 36px;
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        background-color: var(--bg);
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .project-card.is-extra {
+        display: none;
+    }
+
+    .project-card.is-extra.is-visible {
+        display: flex;
+    }
+
+    .project-card:hover {
+        background-color: var(--fg);
+        color: var(--bg);
+    }
+
+    .project-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        color: var(--fg-muted);
+        margin-bottom: 28px;
+    }
+
+    .project-card:hover .project-top,
+    .project-card:hover .project-desc {
+        color: #2b2b2b;
+    }
+
+    .project-num {
+        font-weight: 700;
+        color: var(--fg);
+    }
+
+    .project-card:hover .project-num {
+        color: var(--bg);
+    }
+
+    .project-title {
+        margin: 0 0 14px;
+        font-family: var(--font-display);
+        font-size: 1.75rem;
+        letter-spacing: -0.02em;
+    }
+
+    .project-desc {
+        margin: 0 0 32px;
+        font-size: 0.98rem;
+        line-height: 1.65;
+        color: var(--fg-muted);
+        flex-grow: 1;
+    }
+
+    .project-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 16px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+    }
+
+    .project-card:hover .project-footer {
+        border-top-color: #d4d4d4;
+    }
+
+    .stack-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.06em;
+    }
+
+    .stack-list li {
+        border: 1px solid var(--border-strong);
+        padding: 4px 8px;
+    }
+
+    .project-card:hover .stack-list li {
+        border-color: #080808;
+    }
+
+    .project-link {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        white-space: nowrap;
+    }
+
+    .projects-toggle-wrap {
+        margin-top: 32px;
+    }
+
+    .brutal-btn {
+        background: transparent;
+        color: var(--fg);
+        border: 1px solid var(--fg);
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        padding: 14px 24px;
+        cursor: pointer;
+        transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .brutal-btn:hover {
+        background-color: var(--fg);
+        color: var(--bg);
+    }
+
+    /* À PROPOS */
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1.35fr 0.85fr;
+        gap: 64px;
+        align-items: start;
+    }
+
+    .about-lead {
+        margin: 0 0 20px;
+        font-size: 1.45rem;
+        font-weight: 600;
+        line-height: 1.45;
+        color: var(--fg);
+    }
+
+    .about-body {
+        margin: 0 0 44px;
+        font-size: 1rem;
+        line-height: 1.75;
+        color: var(--fg-muted);
+    }
+
+    .focus-list {
+        border-top: 1px solid var(--border);
+    }
+
+    .focus-row {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 16px;
+        padding: 22px 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .focus-num {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--fg-muted);
+        padding-top: 3px;
+    }
+
+    .focus-title {
+        margin: 0 0 6px;
+        font-size: 1.05rem;
+        font-weight: 700;
+    }
+
+    .focus-desc {
+        margin: 0;
+        font-size: 0.94rem;
+        line-height: 1.6;
+        color: var(--fg-muted);
+    }
+
+    .portrait-frame {
+        margin: 0;
+        border: 1px solid var(--border-strong);
+        background-color: var(--bg-elevated);
+    }
+
+    .portrait-img {
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
+        filter: grayscale(100%) contrast(1.12);
+        transition: filter 0.3s ease;
+    }
+
+    .portrait-frame:hover .portrait-img {
+        filter: grayscale(100%) contrast(1.22);
+    }
+
+    .portrait-caption {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-top: 1px solid var(--border-strong);
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        color: var(--fg-muted);
+    }
+
+    /* LOISIRS */
+    .hobbies-list {
+        border-top: 1px solid var(--border);
+    }
+
+    .hobby-row {
+        display: grid;
+        grid-template-columns: 64px 1.1fr 1.6fr 72px;
+        gap: 24px;
+        align-items: center;
+        padding: 28px 16px;
+        border-bottom: 1px solid var(--border);
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .hobby-row:hover {
+        background-color: var(--fg);
+        color: var(--bg);
+    }
+
+    .hobby-num {
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--fg-muted);
+    }
+
+    .hobby-title {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.45rem;
+        letter-spacing: -0.01em;
+    }
+
+    .hobby-detail {
+        margin: 0;
+        font-size: 0.96rem;
+        line-height: 1.6;
+        color: var(--fg-muted);
+    }
+
+    .hobby-row:hover .hobby-num,
+    .hobby-row:hover .hobby-detail {
+        color: #2b2b2b;
+    }
+
+    .hobby-icon-wrap {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .hobby-icon {
+        height: 44px;
+        width: auto;
+        object-fit: contain;
+        filter: grayscale(100%) contrast(1.15);
+    }
+
+    /* CONTACT */
+    .section-contact {
+        border-bottom: none;
+    }
+
+    .contact-intro {
+        margin: -32px 0 48px;
+        max-width: 540px;
+        font-size: 1.05rem;
+        line-height: 1.65;
+        color: var(--fg-muted);
+    }
+
+    .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-top: 1px solid var(--border);
+        border-left: 1px solid var(--border);
+    }
+
+    .contact-card {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        row-gap: 10px;
+        padding: 32px;
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .contact-card:hover {
+        background-color: var(--fg);
+        color: var(--bg);
+    }
+
+    .contact-label {
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: var(--fg-muted);
+    }
+
+    .contact-card:hover .contact-label {
+        color: #333333;
+    }
+
+    .contact-value {
+        grid-column: 1 / 2;
+        font-size: 1.15rem;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+    .contact-arrow {
+        grid-column: 2 / 3;
+        grid-row: 1 / 3;
+        align-self: center;
+        font-family: var(--font-mono);
+        font-size: 1.4rem;
+    }
+
+    /* FOOTER */
+    .site-footer {
+        border-top: 1px solid var(--border);
+        padding: 28px 0;
+    }
+
+    .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        letter-spacing: 0.12em;
+        color: var(--fg-dim);
+    }
+
+    @media (max-width: 900px) {
+        .projects-grid,
+        .about-grid,
+        .contact-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .hobby-row {
+            grid-template-columns: 48px 1fr auto;
+        }
+
+        .hobby-detail {
+            grid-column: 1 / -1;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 0 20px;
+        }
+
+        .hero {
+            padding: 56px 0 72px;
+        }
+
+        .section {
+            padding: 72px 0;
+        }
+
+        .project-card,
+        .contact-card {
+            padding: 24px;
+        }
+
+        .footer-inner {
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 </style>

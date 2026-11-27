@@ -11,5 +11,9 @@ const { src, top, bottom, left, right, width, height, rotate} = Astro.props;
         position: absolute;
         pointer-events: none;
         z-index: -1;
+        filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.35));
+        --target-opacity: 0.85;
+        opacity: var(--target-opacity);
+        animation: slideFromBottomLeft 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 </style>

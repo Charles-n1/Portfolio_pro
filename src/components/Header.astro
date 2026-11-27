@@ -1,21 +1,45 @@
 <header>
-    <button> <img class="neutral" src="/decorations/gear.svg" /> <img class="blue" src="/decorations/gear-blue.svg" /> </button>
-    <a href="#idproj"> Projets </a>
-    <a href="#idlois"> Loisirs </a>
-    <a href="#idcont"> Contact </a>
+    <button class="btn-top" aria-label="Retour en haut"> <img class="neutral" src="/decorations/gear.svg" /> <img class="blue" src="/decorations/gear-blue.svg" /> </button>
+    <a href="#idproj" data-center-target="#idproj .section-center"> Projets </a>
+    <a href="#idlois" data-center-target="#idlois .section-center"> Loisirs </a>
+    <a href="#idcont" data-center-target="#idcont .content"> Contact </a>
 </header>
+
+<script>
+    document.querySelectorAll<HTMLAnchorElement>('header a[data-center-target]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+            const selector = link.dataset.centerTarget;
+            const target = selector ? document.querySelector(selector) : null;
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const href = link.getAttribute('href');
+                if (href) {
+                    history.replaceState(null, '', href);
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('header .btn-top').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+</script>
 
 <style>
     header {
-        background-color : rgba(100, 100, 100, 0.5);
+        background-color: rgba(96, 100, 112, 0.55);
+        backdrop-filter: blur(10px);
         height: 60px;
         top: 0;
         position: sticky;
-        border: 2px solid;
+        border: 2px solid rgba(147, 222, 255, 0.45);
         border-top: none;
         border-left: none;
         border-right: none;
-        z-index: 1;
+        z-index: 10;
 
         display: flex;
         justify-content: flex-end;
@@ -23,13 +47,20 @@
         padding-right: 50px;
         gap: 40px;
     }
+    header > * {
+        animation: slideFromBottomLeft 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    header > :nth-child(2) { animation-delay: 0.06s; }
+    header > :nth-child(3) { animation-delay: 0.12s; }
+    header > :nth-child(4) { animation-delay: 0.18s; }
     a {
-        color: white;
+        color: var(--color-text, #F7F7F7);
         font-size: 25px;
         text-decoration: none;
+        transition: color 0.2s ease;
     }
     a:hover {
-        color: rgba(0, 127, 255);
+        color: var(--color-accent, #93DEFF);
     }
 
     button {
@@ -37,6 +68,7 @@
         background: none;
         border: none;
         margin-right: auto;
+        cursor: pointer;
     }
     button:active .neutral {
         display: none;

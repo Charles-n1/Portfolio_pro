@@ -1,8 +1,9 @@
 ---
 import Deco from "../components/Deco.astro";
+const { staticMode = true } = Astro.props;
 ---
 
-<loisirs id="idlois">
+<loisirs id={staticMode ? "idlois" : undefined}>
     <Deco src="/decorations/rect_23.svg" top="calc(var(--list-len-opened) + 2550px)" left="1350.5px" width="600px" height="300px" rotate="-44deg"/>
     <Deco src="/decorations/rect_23.svg" top="calc(var(--list-len-opened) + 2133px)" left="1782px" width="600px" height="300px" rotate="-44deg"/>
     <Deco src="/decorations/rect_12.svg" top="calc(var(--list-len-opened) + 2680px)" left="-120px" width="500px" rotate="-33deg"/>
@@ -12,11 +13,13 @@ import Deco from "../components/Deco.astro";
     <Deco src="/decorations/rect_4.svg" top="calc(var(--list-len-opened) + 3115px)" left="1550px" width="200px" height="170px" rotate="-44deg"/>
     <Deco src="/decorations/rect_w6.svg" top="calc(var(--list-len-opened) + 3155px)" left="1650px" width="200px" height="60px" rotate="-44deg"/>
     <Deco src="/decorations/rect_3.svg" top="calc(var(--list-len-opened) + 3650px)" left="-160px" width="550px" height="570px" rotate="-44deg"/>
-    <div class="mtitle"> D'autres loisirs: </div>
-    <div class="list">
-        <div class="title">∘ Vtuber</div> <img class="vtu" src="/logos/youtube.png">
-        <div class="title">∘ Mario Kart Speedrunner</div> <img class="mk8" src="/logos/mariokart8.png">
-        <div class="title">∘ Minecraft</div> <img class="mine" src="/logos/minecraft.png">
+    <div class="section-center">
+        <div class="mtitle"> D'autres loisirs: </div>
+        <div class="list">
+            <div class="title">∘ Vtuber</div> <img class="vtu" src="/logos/youtube.png">
+            <div class="title">∘ Mario Kart Speedrunner</div> <img class="mk8" src="/logos/mariokart8.png">
+            <div class="title">∘ Minecraft</div> <img class="mine" src="/logos/minecraft.png">
+        </div>
     </div>
 </loisirs>
 
@@ -24,43 +27,55 @@ import Deco from "../components/Deco.astro";
     loisirs {
         display: grid;
         align-content: center;
+        justify-content: center;
 
         min-height: 100vh;
-        min-width: 100wh;
+        padding-top: 400px;
+        padding-bottom: 780px;
         font-size: 55px;
-        border: 10px solid green;
+        background: transparent;
+    }
+    .section-center {
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        gap: 30px;
     }
     .list {
         display: grid;
-        grid-template: repeat(3, 120px) / 750px 100px ;
+        grid-template: repeat(3, 120px) / auto auto;
+        column-gap: 48px;
         max-width: 100vw;
         justify-content: center;
         align-items: center;
-
-        border: 10px solid pink;
-        margin-top: 30px;
-        margin-bottom: 780px;
+        animation: slideFromBottomLeft 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: 0.25s;
     }
     .mtitle {
-        margin-left: 300px;      /* un peu à droite : ajuste la valeur */
-        margin-top: 400px;
+        text-align: center;
+        color: var(--color-text, #F7F7F7);
+        animation: slideFromBottomLeft 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: 0.15s;
     }
     .mtitle:hover {
-        color: rgba(0, 127, 255);
+        color: var(--color-accent, #93DEFF);
     }
     .title:hover {
-        color: rgba(0, 127, 255);
+        color: var(--color-accent, #93DEFF);
     }
     .title {
-        ;
+        color: var(--color-text, #F7F7F7);
     }
     .mine {
         height: 80px;
+        justify-self: center;
     }
     .vtu {
         height: 60px;
+        justify-self: center;
     }
     .mk8 {
         height: 60px;
+        justify-self: center;
     }
 </style>

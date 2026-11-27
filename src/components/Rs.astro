@@ -9,11 +9,19 @@ const {src, link} = Astro.props;
 </rs>
 
 <style>
+    rs {
+        display: inline-flex;
+    }
     .rs:active {
-        color: rgba(0, 127, 255);
+        color: var(--color-accent, #93DEFF);
     }
     img {
         height: 80px;
         width: 80px;
+        transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    img:hover {
+        transform: scale(1.08);
+        filter: drop-shadow(0 0 12px rgba(147, 222, 255, 0.65));
     }
 </style>

@@ -34,11 +34,16 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
                 </div>
 
                 <div class="projects-grid">
-                    {projects.map((project) => (
-                        <article class:list={['project-card', { 'is-extra': project.extra }]}>
+                    {projects.map((project, idx) => (
+                        <button
+                            type="button"
+                            class:list={['project-card', { 'is-extra': project.extra }]}
+                            data-project-index={idx}
+                            aria-haspopup="dialog"
+                        >
                             <div class="project-top">
                                 <span class="project-num">{project.index}</span>
-                                <span class="project-meta">{project.category} — {project.year}</span>
+                                <span class="project-meta">{project.category}</span>
                             </div>
 
                             <h3 class="project-title">{project.title}</h3>
@@ -51,16 +56,9 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
                                     ))}
                                 </ul>
 
-                                <a
-                                    href={project.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="project-link"
-                                >
-                                    VOIR ↗
-                                </a>
+                                <span class="project-link" aria-hidden="true">DÉTAILS +</span>
                             </div>
-                        </article>
+                        </button>
                     ))}
                 </div>
 
@@ -71,6 +69,40 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
                 </div>
             </div>
         </section>
+
+        <!-- MODALE DÉTAIL PROJET -->
+        <dialog id="project-modal" class="project-modal" aria-labelledby="modal-title">
+            <div class="modal-box">
+                <div class="modal-top">
+                    <span id="modal-meta" class="modal-meta"></span>
+                    <button type="button" id="modal-close" class="modal-close" aria-label="Fermer">
+                        FERMER ✕
+                    </button>
+                </div>
+
+                <span id="modal-theme" class="modal-theme"></span>
+                <h3 id="modal-title" class="modal-title"></h3>
+                <p id="modal-summary" class="modal-summary"></p>
+
+                <div class="modal-section">
+                    <span class="modal-label">POINTS TRAVAILLÉS</span>
+                    <ul id="modal-highlights" class="modal-highlights"></ul>
+                </div>
+
+                <div class="modal-bottom">
+                    <ul id="modal-stack" class="stack-list"></ul>
+                    <a
+                        id="modal-link"
+                        href="https://github.com/Charles-n1"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="modal-github"
+                    >
+                        GITHUB ↗
+                    </a>
+                </div>
+            </div>
+        </dialog>
 
         <!-- 02 — À PROPOS -->
         <section id="about" class="section">
@@ -169,9 +201,59 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
         </div>
     </footer>
 
-    <script>
+    <script is:inline define:vars={{ projectsData: projects }}>
+        const modal = document.getElementById('project-modal');
+        const modalMeta = document.getElementById('modal-meta');
+        const modalTheme = document.getElementById('modal-theme');
+        const modalTitle = document.getElementById('modal-title');
+        const modalSummary = document.getElementById('modal-summary');
+        const modalHighlights = document.getElementById('modal-highlights');
+        const modalStack = document.getElementById('modal-stack');
+        const modalLink = document.getElementById('modal-link');
+        const modalClose = document.getElementById('modal-close');
+
+        const openProjectModal = (project) => {
+            if (!modal || !project) return;
+            modalMeta.textContent = `${project.index} · ${project.context} · ${project.year}`;
+            modalTheme.textContent = project.category;
+            modalTitle.textContent = project.title;
+            modalSummary.textContent = project.description;
+
+            modalHighlights.innerHTML = '';
+            project.highlights.forEach((point) => {
+                const li = document.createElement('li');
+                li.textContent = point;
+                modalHighlights.appendChild(li);
+            });
+
+            modalStack.innerHTML = '';
+            project.stack.forEach((tech) => {
+                const li = document.createElement('li');
+                li.textContent = tech;
+                modalStack.appendChild(li);
+            });
+
+            modalLink.href = project.link;
+            modal.showModal();
+        };
+
+        document.querySelectorAll('[data-project-index]').forEach((card) => {
+            card.addEventListener('click', () => {
+                const idx = Number(card.getAttribute('data-project-index'));
+                openProjectModal(projectsData[idx]);
+            });
+        });
+
+        modalClose?.addEventListener('click', () => modal?.close());
+
+        modal?.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.close();
+            }
+        });
+
         const toggleBtn = document.getElementById('toggle-projects');
-        const extraCards = document.querySelectorAll<HTMLElement>('.project-card.is-extra');
+        const extraCards = document.querySelectorAll('.project-card.is-extra');
 
         if (toggleBtn && extraCards.length > 0) {
             let expanded = false;
@@ -293,11 +375,22 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
     .project-card {
         display: flex;
         flex-direction: column;
+        width: 100%;
+        text-align: left;
+        font-family: inherit;
+        color: var(--fg);
         padding: 36px;
+        border: none;
         border-right: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
         background-color: var(--bg);
+        cursor: pointer;
         transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .project-card:hover {
+        background-color: var(--fg);
+        color: var(--bg);
     }
 
     .project-card.is-extra {
@@ -308,15 +401,12 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
         display: flex;
     }
 
-    .project-card:hover {
-        background-color: var(--fg);
-        color: var(--bg);
-    }
-
     .project-top {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 12px;
+        width: 100%;
         font-family: var(--font-mono);
         font-size: 0.75rem;
         letter-spacing: 0.1em;
@@ -358,8 +448,140 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
         justify-content: space-between;
         align-items: flex-end;
         gap: 16px;
+        width: 100%;
         padding-top: 20px;
         border-top: 1px solid var(--border);
+    }
+
+    /* MODALE PROJET */
+    .project-modal {
+        padding: 0;
+        border: 1px solid var(--fg);
+        background-color: var(--bg);
+        color: var(--fg);
+        width: min(680px, calc(100vw - 32px));
+        max-height: calc(100vh - 48px);
+        overflow-y: auto;
+    }
+
+    .project-modal::backdrop {
+        background-color: rgba(0, 0, 0, 0.82);
+        backdrop-filter: blur(4px);
+    }
+
+    .modal-box {
+        padding: 36px;
+    }
+
+    .modal-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding-bottom: 20px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .modal-meta {
+        font-family: var(--font-mono);
+        font-size: 0.76rem;
+        letter-spacing: 0.12em;
+        color: var(--fg-muted);
+    }
+
+    .modal-close {
+        background: transparent;
+        color: var(--fg);
+        border: 1px solid var(--border-strong);
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .modal-close:hover {
+        background-color: var(--fg);
+        color: var(--bg);
+    }
+
+    .modal-theme {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: var(--accent);
+        margin-bottom: 10px;
+    }
+
+    .modal-title {
+        margin: 0 0 12px;
+        font-family: var(--font-display);
+        font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+    }
+
+    .modal-summary {
+        margin: 0 0 28px;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--fg-muted);
+    }
+
+    .modal-section {
+        padding: 24px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 24px;
+    }
+
+    .modal-label {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: var(--fg-muted);
+        margin-bottom: 14px;
+    }
+
+    .modal-highlights {
+        margin: 0;
+        padding-left: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 0.96rem;
+        line-height: 1.6;
+        color: var(--fg);
+    }
+
+    .modal-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .modal-github {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        padding: 10px 16px;
+        border: 1px solid var(--fg);
+        transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .modal-github:hover {
+        background-color: var(--fg);
+        color: var(--bg);
     }
 
     .project-card:hover .project-footer {

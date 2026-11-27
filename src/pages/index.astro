@@ -1,5 +1,9 @@
 ---
-import Portfolio from '../components/Portfolio.astro';
+import Header from '../components/Header.astro';
+import Presentation from './Presentation.astro';
+import Projets from './Projects.astro';
+import Loisirs from './Loisirs.astro';
+import Contacts from './Contacts.astro';
 ---
 
 <!doctype html>
@@ -11,84 +15,28 @@ import Portfolio from '../components/Portfolio.astro';
         <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     </head>
     <body>
-        <!-- Partie 1 : Version animée -->
-        <div id="view-animated" class="view-animated">
-            <Portfolio mode="animated" />
-        </div>
-
-        <!-- Partie 2 : Version statique (position finale de tous les widgets) -->
-        <div id="view-static" class="view-static" hidden>
-            <Portfolio mode="static" />
-        </div>
-
-        <script>
-            const viewAnimated = document.getElementById('view-animated');
-            const viewStatic = document.getElementById('view-static');
-
-            if (viewAnimated && viewStatic) {
-                let switched = false;
-
-                const switchToStatic = () => {
-                    if (switched) return;
-                    switched = true;
-                    const scrollY = window.scrollY;
-                    viewStatic.hidden = false;
-                    viewAnimated.remove();
-                    window.scrollTo(0, scrollY);
-                };
-
-                const animations = viewAnimated.getAnimations({ subtree: true });
-                if (animations.length > 0) {
-                    Promise.all(animations.map((anim) => anim.finished.catch(() => {}))).then(switchToStatic);
-                }
-
-                // Sécurité si l'utilisateur a réduit les animations ou changé d'onglet
-                window.setTimeout(switchToStatic, 1750);
-            }
-        </script>
+        <Header />
+        <Presentation />
+        <Projets />
+        <Loisirs />
+        <Contacts />
     </body>
 </html>
 
-<style is:global>
-    :root {
-        --color-bg: #323643;
-        --color-surface: #606470;
-        --color-accent: #93DEFF;
-        --color-text: #F7F7F7;
-    }
-
-    html {
-        background-color: #323643;
-        scroll-behavior: smooth;
-    }
-
+<style>
     body {
-        position: relative;
-        background-color: transparent;
-        color: var(--color-text);
+        background-color : rgba(40,40,40);
         font-family: Nunito, sans-serif;
-        min-height: 100vh;
+        height: 3000px;
         margin: 0;
         overflow-x: clip;
 
         --list-len-opened: 0px;
     }
-
     body:has(#idproj details[open]) {
         --list-len-opened: 326px;
     }
     body:has(#idproj details:not([open])) {
         --list-len-opened: 0px;
-    }
-
-    @keyframes slideFromBottomLeft {
-        from {
-            opacity: 0;
-            transform: translate3d(-25vw, 25vh, 0);
-        }
-        to {
-            opacity: var(--target-opacity, 1);
-            transform: translate3d(0, 0, 0);
-        }
     }
 </style>

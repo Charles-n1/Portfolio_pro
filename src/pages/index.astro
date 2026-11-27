@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import { profile, projects, hobbies, contacts } from '../data/portfolio';
+import { profile, internships, projects, hobbies, contacts } from '../data/portfolio';
 ---
 
 <Layout title={profile.shortTitle}>
@@ -25,11 +25,50 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
             </div>
         </section>
 
-        <!-- 01 — PROJETS -->
+        <!-- 01 — STAGES -->
+        <section id="stages" class="section">
+            <div class="container">
+                <div class="section-head">
+                    <span class="section-index">01 / STAGES</span>
+                    <h2 class="section-title">Expériences en laboratoire.</h2>
+                </div>
+
+                <div class="stages-grid">
+                    {internships.map((stage, idx) => (
+                        <button
+                            type="button"
+                            class="project-card"
+                            data-stage-index={idx}
+                            aria-haspopup="dialog"
+                        >
+                            <div class="project-top">
+                                <span class="project-num">{stage.index}</span>
+                                <span class="project-meta">{stage.theme}</span>
+                            </div>
+
+                            <h3 class="project-title">{stage.organization}</h3>
+                            <p class="project-desc">{stage.role} — {stage.summary}</p>
+
+                            <div class="project-footer">
+                                <ul class="stack-list">
+                                    {stage.stack.map((tech) => (
+                                        <li>{tech}</li>
+                                    ))}
+                                </ul>
+
+                                <span class="project-link" aria-hidden="true">DÉTAILS +</span>
+                            </div>
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        <!-- 02 — PROJETS -->
         <section id="work" class="section">
             <div class="container">
                 <div class="section-head">
-                    <span class="section-index">01 / PROJETS</span>
+                    <span class="section-index">02 / PROJETS</span>
                     <h2 class="section-title">Travaux sélectionnés.</h2>
                 </div>
 
@@ -104,11 +143,11 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
             </div>
         </dialog>
 
-        <!-- 02 — À PROPOS -->
+        <!-- 03 — À PROPOS -->
         <section id="about" class="section">
             <div class="container">
                 <div class="section-head">
-                    <span class="section-index">02 / À PROPOS</span>
+                    <span class="section-index">03 / À PROPOS</span>
                     <h2 class="section-title">Profil & Spécialités.</h2>
                 </div>
 
@@ -141,11 +180,11 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
             </div>
         </section>
 
-        <!-- 03 — LOISIRS -->
+        <!-- 04 — LOISIRS -->
         <section id="hobbies" class="section">
             <div class="container">
                 <div class="section-head">
-                    <span class="section-index">03 / LOISIRS</span>
+                    <span class="section-index">04 / LOISIRS</span>
                     <h2 class="section-title">En dehors du code.</h2>
                 </div>
 
@@ -164,11 +203,11 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
             </div>
         </section>
 
-        <!-- 04 — CONTACT -->
+        <!-- 05 — CONTACT -->
         <section id="contact" class="section section-contact">
             <div class="container">
                 <div class="section-head">
-                    <span class="section-index">04 / CONTACT</span>
+                    <span class="section-index">05 / CONTACT</span>
                     <h2 class="section-title">Travaillons ensemble.</h2>
                 </div>
 
@@ -201,7 +240,7 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
         </div>
     </footer>
 
-    <script is:inline define:vars={{ projectsData: projects }}>
+    <script is:inline define:vars={{ projectsData: projects, stagesData: internships }}>
         const modal = document.getElementById('project-modal');
         const modalMeta = document.getElementById('modal-meta');
         const modalTheme = document.getElementById('modal-theme');
@@ -212,35 +251,68 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
         const modalLink = document.getElementById('modal-link');
         const modalClose = document.getElementById('modal-close');
 
-        const openProjectModal = (project) => {
-            if (!modal || !project) return;
-            modalMeta.textContent = `${project.index} · ${project.context} · ${project.year}`;
-            modalTheme.textContent = project.category;
-            modalTitle.textContent = project.title;
-            modalSummary.textContent = project.description;
+        const openDetailModal = ({ meta, theme, title, summary, highlights, stack, link }) => {
+            if (!modal) return;
+            modalMeta.textContent = meta;
+            modalTheme.textContent = theme;
+            modalTitle.textContent = title;
+            modalSummary.textContent = summary;
 
             modalHighlights.innerHTML = '';
-            project.highlights.forEach((point) => {
+            highlights.forEach((point) => {
                 const li = document.createElement('li');
                 li.textContent = point;
                 modalHighlights.appendChild(li);
             });
 
             modalStack.innerHTML = '';
-            project.stack.forEach((tech) => {
+            stack.forEach((tech) => {
                 const li = document.createElement('li');
                 li.textContent = tech;
                 modalStack.appendChild(li);
             });
 
-            modalLink.href = project.link;
+            if (link) {
+                modalLink.href = link;
+                modalLink.hidden = false;
+            } else {
+                modalLink.hidden = true;
+            }
+
             modal.showModal();
         };
+
+        document.querySelectorAll('[data-stage-index]').forEach((card) => {
+            card.addEventListener('click', () => {
+                const idx = Number(card.getAttribute('data-stage-index'));
+                const stage = stagesData[idx];
+                if (!stage) return;
+                openDetailModal({
+                    meta: `${stage.index} · STAGE · ${stage.period}`,
+                    theme: stage.theme,
+                    title: stage.organization,
+                    summary: `${stage.role} — ${stage.summary}`,
+                    highlights: stage.highlights,
+                    stack: stage.stack,
+                    link: null,
+                });
+            });
+        });
 
         document.querySelectorAll('[data-project-index]').forEach((card) => {
             card.addEventListener('click', () => {
                 const idx = Number(card.getAttribute('data-project-index'));
-                openProjectModal(projectsData[idx]);
+                const project = projectsData[idx];
+                if (!project) return;
+                openDetailModal({
+                    meta: `${project.index} · ${project.context} · ${project.year}`,
+                    theme: project.category,
+                    title: project.title,
+                    summary: project.description,
+                    highlights: project.highlights,
+                    stack: project.stack,
+                    link: project.link,
+                });
             });
         });
 
@@ -362,6 +434,42 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
         font-size: clamp(2rem, 4.5vw, 3.4rem);
         line-height: 1.05;
         letter-spacing: -0.02em;
+    }
+
+    /* STAGES */
+    .stages-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-top: 1px solid var(--border);
+        border-left: 1px solid var(--border);
+    }
+
+    .stage-card {
+        display: flex;
+        flex-direction: column;
+        padding: 36px;
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        background-color: var(--bg);
+    }
+
+    .stage-role {
+        margin: 0 0 18px;
+        font-size: 0.96rem;
+        line-height: 1.55;
+        color: var(--fg-muted);
+    }
+
+    .stage-highlights {
+        margin: 0 0 28px;
+        padding-left: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.92rem;
+        line-height: 1.55;
+        color: var(--fg-muted);
+        flex-grow: 1;
     }
 
     /* PROJETS */
@@ -863,6 +971,7 @@ import { profile, projects, hobbies, contacts } from '../data/portfolio';
     }
 
     @media (max-width: 900px) {
+        .stages-grid,
         .projects-grid,
         .about-grid,
         .contact-grid {

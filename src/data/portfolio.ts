@@ -1,3 +1,14 @@
+export interface InternshipItem {
+    index: string;
+    organization: string;
+    role: string;
+    theme: string;
+    period: string;
+    summary: string;
+    highlights: string[];
+    stack: string[];
+}
+
 export interface ProjectItem {
     index: string;
     title: string;
@@ -55,6 +66,39 @@ export const profile = {
         },
     ],
 };
+
+export const internships: InternshipItem[] = [
+    {
+        index: "01",
+        organization: "Laboratoire EMC — Université Lyon 2",
+        role: "Stage Développeur Python / Flask",
+        theme: "STAGE · PYTHON / FLASK",
+        period: "2025–2026",
+        summary: "Développement d'un prototype d'API de gestion du matériel informatique.",
+        highlights: [
+            "Migration d'un prototype en terminal vers Flask (routes et interface HTML)",
+            "Base de données SQLite avec insertion, lecture et suppression",
+            "Filtres : tri alphabétique, tri par date et filtre par valeur",
+            "Gestion des erreurs, des entrées et des sorties",
+        ],
+        stack: ["Python", "Flask", "SQLite", "HTML"],
+    },
+    {
+        index: "02",
+        organization: "Laboratoire CRPPC — Université Lyon 2",
+        role: "Stage Automatisation VBA / Excel",
+        theme: "STAGE · VBA / EXCEL",
+        period: "2025–2026",
+        summary: "Préparation de la base documentaire du laboratoire à sa mise en ligne.",
+        highlights: [
+            "Programme VBA de cotation automatique pour plus de 2 800 documents",
+            "Uniformisation des tableaux Excel (ordre des colonnes, colonnes manquantes)",
+            "Rédaction d'une norme d'insertion des données pour les futurs bénévoles",
+            "Accueil des étudiants et des chercheurs, formation de bénévoles",
+        ],
+        stack: ["VBA", "Excel", "Documentation"],
+    },
+];
 
 export const projects: ProjectItem[] = [
     {
@@ -263,42 +307,6 @@ export const projects: ProjectItem[] = [
         ],
         stack: ["Python", "IA", "Robotique"],
         link: "https://github.com/Charles-n1/Echo",
-        extra: true,
-    },
-    {
-        index: "13",
-        title: "API Gestion de Matériel (EMC)",
-        context: "Stage · Université Lyon 2",
-        category: "BACKEND / FLASK",
-        year: "2025–2026",
-        description:
-            "Prototype d'API et interface web de gestion du matériel informatique pour le laboratoire EMC.",
-        highlights: [
-            "Migration d'un prototype en terminal vers Flask (routes et interface HTML)",
-            "Base de données SQLite avec insertion, lecture et suppression",
-            "Filtres : tri alphabétique, tri par date et filtre par valeur",
-            "Gestion des erreurs, des entrées et des sorties",
-        ],
-        stack: ["Python", "Flask", "SQLite", "HTML"],
-        link: "https://github.com/Charles-n1/API-Flask-Sqlite-Python",
-        extra: true,
-    },
-    {
-        index: "14",
-        title: "Cotation Documentaire (CRPPC)",
-        context: "Stage · Université Lyon 2",
-        category: "AUTOMATISATION",
-        year: "2025–2026",
-        description:
-            "Automatisation et uniformisation de la base documentaire du laboratoire CRPPC avant sa mise en ligne.",
-        highlights: [
-            "Programme VBA de cotation automatique pour plus de 2 800 documents",
-            "Uniformisation des tableaux Excel (ordre des colonnes, colonnes manquantes)",
-            "Rédaction d'une norme d'insertion des données pour les futurs bénévoles",
-            "Accueil des étudiants et des chercheurs, formation de bénévoles",
-        ],
-        stack: ["VBA", "Excel", "Documentation"],
-        link: "https://github.com/Charles-n1",
         extra: true,
     },
 ];
